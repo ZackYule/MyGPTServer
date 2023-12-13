@@ -1,0 +1,14 @@
+.DS_Store
+env
+config.json
+pandora_cookies.json
+.vscode
+.pytest_cache
+__pycache__
+._.DS_Store
+._requirements.txt
+pg*
+tests/conftest.py
+tests/test_search.py
+webs/duckduckgo.py
+webs/result.py
