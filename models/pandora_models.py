@@ -16,7 +16,7 @@ class ChatRequest(BaseModel):
 
 class ChatMessage(BaseModel):
     role: str
-    content: str
+    content: Optional[str] = None
 
 
 class Choice(BaseModel):

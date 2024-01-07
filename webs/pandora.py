@@ -12,11 +12,17 @@ class Login2Page:
 
     def __init__(self, browser) -> None:
 
-        self.context: BrowserContext = browser.new_context()
+        self.context: BrowserContext = browser.new_context(
+            user_agent=
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            viewport={
+                'width': 1280,
+                'height': 720
+            })
 
     def logging(self, token: str) -> Page:
         page = self.context.new_page()
-        page.goto(self.URL, timeout=60000)
+        page.goto(self.URL, wait_until="load")
 
         token_button = page.get_by_role("button",
                                         name="Continue with Access Token")
@@ -62,7 +68,7 @@ class ChatPage:
         self.markdown_converter = html2text.HTML2Text()
         self.conversation_turn = 1
 
-        self.page.goto(self.URL, timeout=60000)
+        self.page.goto(self.URL, wait_until="load")
         assert self.web_logo.is_visible()
 
     @property
