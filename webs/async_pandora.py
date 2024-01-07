@@ -20,13 +20,12 @@ class Login2Page:
 
     async def logging(self, token: str) -> Page:
         page = await self.context.new_page()
-        await page.goto(self.URL)
+        await page.goto(self.URL, timeout=60000)
 
-        token_button = await page.get_by_role(
-            "button", name="Continue with Access Token")
-        token_input = await page.get_by_placeholder(
-            "Please input (access / share")
-        token_enter_button = await page.get_by_role("button", name="OK")
+        token_button = page.get_by_role("button",
+                                        name="Continue with Access Token")
+        token_input = page.get_by_placeholder("Please input (access / share")
+        token_enter_button = page.get_by_role("button", name="OK")
 
         await token_button.click()
         await token_input.fill(token)
@@ -68,7 +67,7 @@ class ChatPage:
 
     @classmethod
     async def create(cls, page: Page):
-        await page.goto(cls.URL)
+        await page.goto(cls.URL, timeout=60000)
         toggle_button = page.locator('css=[id^=radix-]')
         GPT4_button = page.get_by_role("menuitem",
                                        name="GPT-4 With DALL·E, browsing")

@@ -1,5 +1,5 @@
 .DS_Store
-env
+venv
 config.json
 pandora_cookies.json
 .vscode
@@ -12,3 +12,4 @@ tests/conftest.py
 tests/test_search.py
 webs/duckduckgo.py
 webs/result.py
+

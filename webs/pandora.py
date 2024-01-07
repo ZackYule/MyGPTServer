@@ -16,7 +16,7 @@ class Login2Page:
 
     def logging(self, token: str) -> Page:
         page = self.context.new_page()
-        page.goto(self.URL)
+        page.goto(self.URL, timeout=60000)
 
         token_button = page.get_by_role("button",
                                         name="Continue with Access Token")
@@ -62,7 +62,7 @@ class ChatPage:
         self.markdown_converter = html2text.HTML2Text()
         self.conversation_turn = 1
 
-        self.page.goto(self.URL)
+        self.page.goto(self.URL, timeout=60000)
         assert self.web_logo.is_visible()
 
     @property

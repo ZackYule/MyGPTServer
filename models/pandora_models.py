@@ -1,5 +1,5 @@
 # pandora_models.py
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 
@@ -36,6 +36,6 @@ class ChatResponse(BaseModel):
     object: str
     created: int
     model: str
-    system_fingerprint: str
+    system_fingerprint: Optional[str] = None
     choices: List[Choice]
     usage: Usage
