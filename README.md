@@ -1,1 +1,34 @@
-# 🌐 MyGPTServer 🤖\n\n## 📝 项目介绍\n\nMyGPTServer 是一个创新的项目，旨在将 GPT-4 的网页版转换成一个可定制的 API。通过这个服务器，您可以轻松地将 GPT-4 的强大功能集成到您自己的应用程序中，无论是用于自动化任务、数据分析还是其他创新用途。这个项目是为那些希望利用 GPT-4 强大能力但又希望更多控制和灵活性的开发者和技术爱好者准备的。🚀\n\n## 🚀 快速开始\n\n要开始使用 MyGPTServer，请遵循以下步骤：\n\n### 安装\n\n克隆仓库到本地：\n\n```bash\ngit clone https://github.com/your-username/MyGPTServer.git\ncd MyGPTServer\n```\n\n安装依赖：\n\n```bash\npipenv install\n```\n\n### 运行\n\n启动服务器：\n\n```bash\npipenv run start\n```\n\n## 🔧 测试\n\n确保您的代码在部署前是稳定且可靠的：\n\n```bash\npipenv run test\n```\n\n
+# 🌐 MyGPTServer 🤖
+
+## 📝 项目介绍
+
+MyGPTServer 是一个创新的项目，旨在将 GPT-4 的网页版转换成一个可定制的 API。通过这个服务器，您可以轻松地将 GPT-4 的强大功能集成到您自己的应用程序中，无论是用于自动化任务、数据分析还是其他创新用途。这个项目是为那些希望利用 GPT-4 强大能力但又希望更多控制和灵活性的开发者和技术爱好者准备的。🚀
+
+## 🚀 快速开始
+
+要开始使用 MyGPTServer，请遵循以下步骤：
+
+### 安装
+
+克隆仓库到本地：
+
+```bash
+git clone https://github.com/your-username/MyGPTServer.git
+cd MyGPTServer```
+
+安装依赖：
+
+```bash
+pipenv install```
+
+###### 运行
+
+启动服务器：
+
+```bash
+pipenv run start```
+
+### 🔧 测试
+确保您的代码在部署前是稳定且可靠的：
+```bash
+pipenv run test```
