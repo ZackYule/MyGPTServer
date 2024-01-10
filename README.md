@@ -13,7 +13,7 @@ MyGPTServer 是一个创新的项目，旨在将 GPT-4 的网页版转换成一�
 克隆仓库到本地：
 
 ```bash
-git clone https://github.com/your-username/MyGPTServer.git
+git clone https://github.com/ZackYule/MyGPTServer.git
 cd MyGPTServer
 ```
 
@@ -21,6 +21,7 @@ cd MyGPTServer
 
 ```bash
 pipenv install
+playwright install
 ```
 
 ###### 运行
