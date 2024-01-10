@@ -14,21 +14,25 @@ MyGPTServer 是一个创新的项目，旨在将 GPT-4 的网页版转换成一�
 
 ```bash
 git clone https://github.com/your-username/MyGPTServer.git
-cd MyGPTServer```
+cd MyGPTServer
+```
 
 安装依赖：
 
 ```bash
-pipenv install```
+pipenv install
+```
 
 ###### 运行
 
 启动服务器：
 
 ```bash
-pipenv run start```
+pipenv run start
+```
 
 ### 🔧 测试
 确保您的代码在部署前是稳定且可靠的：
 ```bash
-pipenv run test```
+pipenv run test
+```
