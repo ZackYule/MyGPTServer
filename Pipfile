@@ -5,6 +5,7 @@ name = "pip_conf_index_global"
 
 [scripts]
 start = "uvicorn main:app --reload --timeout-keep-alive 60 --port 8080"
+test = "python tests/test_async_pandora_webs.py"
 
 [packages]
 fastapi = "*"

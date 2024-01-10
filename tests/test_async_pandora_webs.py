@@ -1,3 +1,10 @@
+import sys
+from pathlib import Path
+
+current_dir = Path(__file__).resolve().parent
+project_root = current_dir.parent
+sys.path.append(str(project_root))
+
 from webs.async_pandora import Login2Page, ChatPage
 from playwright.async_api import async_playwright
 import logging
@@ -9,11 +16,11 @@ logger = logging.getLogger(__name__)
 
 
 async def get_gpt4_ready(playwright) -> None:
-    browser = await playwright.chromium.launch(headless=True)
+    browser = await playwright.chromium.launch(headless=False)
     login_context = await Login2Page.create(browser)
     page = await login_context.get_new_page()
     chat_page = await ChatPage.create(page)
-    # await chat_page.switch_to_GPT4()
+    await chat_page.switch_to_GPT4_Mobile()
     return chat_page
 
 

@@ -23,14 +23,10 @@ class Login2Page:
                 'height': 720
             },
             extra_http_headers={
-                "Accept": "text/event-stream",
-                "Accept-Language": "en-US",
-                "Content-Type": "application/json",
-                "Referer": "http://127.0.0.1",
-                "Sec-Ch-Ua":
-                "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"",
-                "Sec-Ch-Ua-Mobile": "?0",
-                "Sec-Ch-Ua-Platform": "\"macOS\""
+                'Sec-Ch-Ua':
+                '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+                'Sec-Ch-Ua-Mobile': '?0',
+                'Sec-Ch-Ua-Platform': '"macOS"',
             })
         return cls(context)
 
@@ -71,29 +67,33 @@ class ChatPage:
     answer_delay = get_config('answer_delay')
 
     def __init__(self, page: Page, toggle_button, GPT4_button, ask_input,
-                 send_button, playwright):
+                 send_button, alpha_models_button, gpt4_mobile_button):
         self.page = page
         self.toggle_button = toggle_button
         self.GPT4_button = GPT4_button
         self.ask_input = ask_input
         self.send_button = send_button
-        self.playwright = playwright
+        self.alpha_models_button = alpha_models_button
+        self.gpt4_mobile_button = gpt4_mobile_button
         self.answer_delay = get_config('answer_delay')
         self.markdown_converter = html2text.HTML2Text()
         self.conversation_turn = 1
 
     @classmethod
-    async def create(cls, page: Page, playwright: any):
-        await page.goto(cls.URL, wait_until="load")
+    async def create(cls, page: Page):
+        await page.goto(cls.URL, wait_until="load", timeout=60000)
         toggle_button = page.locator('css=[id^=radix-]')
         GPT4_button = page.get_by_role("menuitem",
                                        name="GPT-4 With DALL·E, browsing")
         ask_input = page.get_by_placeholder("Message ChatGPT…")
         send_button = page.get_by_test_id("send-button")
-        await page.wait_for_selector("text=Alpha", state="visible")
+        alpha_models_button = page.get_by_role("menuitem", name="Alpha Models")
+        gpt4_mobile_button = page.get_by_text("GPT4 (Mobile)")
+        await page.wait_for_selector("text=" + get_config('answer_ready_sign'),
+                                     state="visible")
         # await asyncio.sleep(cls.answer_delay)
         return cls(page, toggle_button, GPT4_button, ask_input, send_button,
-                   playwright)
+                   alpha_models_button, gpt4_mobile_button)
 
     @property
     def realtime_conversation_container_selector(self) -> str:
@@ -121,6 +121,11 @@ class ChatPage:
         await self.toggle_button.click()
         await self.GPT4_button.click()
 
+    async def switch_to_GPT4_Mobile(self) -> None:
+        await self.toggle_button.click()
+        await self.alpha_models_button.hover()
+        await self.gpt4_mobile_button.click()
+
     async def ask(self, content: str) -> None:
         await self.ask_input.fill(content)
         # await asyncio.sleep(self.answer_delay)
@@ -128,12 +133,36 @@ class ChatPage:
         self.conversation_turn += 2
 
     async def get_answer(self, text_format='text') -> str:
-        result_box = self.page.locator(
-            self.result_conversation_container_selector)
-        answer_el = result_box.locator('[data-message-id] .markdown')
-        if text_format == 'markdown':
-            return self.markdown_converter.handle(await answer_el.inner_html())
-        return await answer_el.inner_text()
+        regenerate_selector = 'text=Regenerate'
+        result_box_selector = self.result_conversation_container_selector
+
+        while True:
+            regenerate_task = asyncio.create_task(
+                self.page.wait_for_selector(regenerate_selector))
+            answer_task = asyncio.create_task(
+                self.page.wait_for_selector(result_box_selector))
+
+            done, pending = await asyncio.wait(
+                [regenerate_task, answer_task],
+                return_when=asyncio.FIRST_COMPLETED)
+            # 取消尚未完成的任务
+            for task in pending:
+                task.cancel()
+            # 获取完成的任务
+            completed_task = done.pop()
+            # 根据完成的任务执行相应的代码
+            if completed_task == regenerate_task:
+                print("点击了'Regenerate'按钮。")
+                await self.page.click(regenerate_selector)
+            elif completed_task == answer_task:
+                print("找到回答")
+                result_box = self.page.locator(
+                    self.result_conversation_container_selector)
+                answer_el = result_box.locator('[data-message-id] .markdown')
+                if text_format == 'markdown':
+                    return self.markdown_converter.handle(
+                        await answer_el.inner_html())
+                return await answer_el.inner_text()
 
     async def get_real_time_answer(self, text_format='text') -> str:
         real_time_answer_el = self.realtime_conversation_element
